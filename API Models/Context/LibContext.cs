@@ -18,6 +18,7 @@ namespace API_Models.Context
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Library> Libraries { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
