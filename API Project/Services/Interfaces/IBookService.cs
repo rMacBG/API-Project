@@ -5,10 +5,10 @@ namespace API_Project.Controllers
     public interface IBookService
     {
         
-        Task<List<Book>> GetBooks();
-        Task<List<Book>> PostBooks();
-        Task<List<Book>>GetBooksByName(string name); 
-        void AddBook(Book book);
-        void RemoveBook(Book book);
+        Task<IEnumerable<Book>> GetBooks();
+        Task<Book> GetBookById(Guid guid);
+        Task<Book> AddBook(Book book);
+        Task<Book> UpdateBook(Book book);
+        void RemoveBook(Guid guid);
     }
 }

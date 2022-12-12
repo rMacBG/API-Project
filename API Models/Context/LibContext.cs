@@ -13,7 +13,7 @@ namespace API_Models.Context
         //public LibContext(DbContextOptions options) : base(options)
         //{
         //}
-
+        public DbSet<BaseModel> BaseModel { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Author> Authors { get; set; }
