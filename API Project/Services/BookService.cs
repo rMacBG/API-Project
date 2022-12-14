@@ -1,49 +1,64 @@
 ﻿using API_Models;
 using API_Models.Context;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 
 namespace API_Project.Controllers
 {
-    //public class BookService : IBookService
-    //{
-        
-    //    private readonly LibContext context;
-    //    public BookService(LibContext context)
-    //    {
-    //          this.context = context;
-    //    }
+    public class BookService : IBookService
+    {
+        private readonly LibContext appContext;
+        public BookService(LibContext appContext)
+        {
+            this.appContext = appContext;
+        }
 
-    //    public void AddBook(Book book)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public async Task<IEnumerable<Book>> GetBooks()
+        {
+            return await appContext.Books.ToListAsync();
+        }
 
-        
+        public async Task<Book> GetBookById(Guid guid)
+        {
+            return await appContext.Books
+                .FirstOrDefaultAsync(e => e.Id == guid);
+        }
 
-    //    public Task<List<Book>> GetBooks(){
-    //        return context.GetBooks;
-    //        }
+        public async Task<Book> AddBook(Book book)
+        {
+            var result = await appContext.Books.AddAsync(book);
+             await appContext.SaveChangesAsync();
+            return result.Entity;
+        }
+        public async Task<Book> UpdateBook(Book book)
+        {
+           var result = await appContext.Books
+                .FirstOrDefaultAsync(e => e.Id == book.Id);
+            if (result != null) 
+            {
+                result.Name= book.Name;
+                result.Author= book.Author;
+                result.Description= book.Description;
+                result.BookPages= book.BookPages;
+                result.ReleaseYear= book.ReleaseYear;
+                
+                await appContext.SaveChangesAsync();
+                return result;
+            }
+            return null;
+        }
 
-    //    public Task<List<Book>> GetBooksByName(string name)
-    //    {
-    //        return context.GetBooksByName(name);
-    //    }
-
-    //    public Task<List<Book>> PostBooks()
-    //    {
-    //       return context.PostBooks;
-
-    //    }
-
-    //    public void RemoveBook(Book book)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
+        public async void RemoveBook(Guid guid)
+        {
+            var result = await appContext.Books
+                .FirstOrDefaultAsync(e => e.Id == guid);
+        }
 
        
-    //}
-    
 
-   
+       
+    }
+
+
+
+
 }

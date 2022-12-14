@@ -5,7 +5,7 @@ namespace API_Models
 {
     public class Book : BaseModel
     {
-       [StringLength(50)]
+       [StringLength(150)]
         public string Name { get; set; }
         [Required(ErrorMessage ="Invalid Author")]
         public Author Author { get; set; }

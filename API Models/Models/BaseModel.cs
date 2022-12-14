@@ -11,7 +11,7 @@ namespace API_Models.Models
     {
         public BaseModel()
         {
-            this.Id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
         public Guid Id { get; set; }
         

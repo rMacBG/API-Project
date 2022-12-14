@@ -2,6 +2,8 @@
 using API_Models.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace API_Project.Controllers
 {
@@ -9,17 +11,26 @@ namespace API_Project.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly LibContext _context;
 
-        public BooksController(LibContext context)
+        private readonly IBookService bookService;
+        public BooksController(IBookService bookService)
         {
-            _context = context;
+            this.bookService = bookService;
         }
 
         [HttpGet]
-        
-      public ActionResult<IEnumerable<Book>> GetBooks() =>
-         _context.Books;
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        {
+            try
+            {
+                return (await bookService.GetBooks()).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         
     }
 }

@@ -10,15 +10,15 @@ namespace API_Models.Context
 {
     public class LibContext : IdentityDbContext
     {
-        //public LibContext(DbContextOptions options) : base(options)
-        //{
-        //}
+        public LibContext(DbContextOptions options) : base(options)
+        {
+        }
         public DbSet<BaseModel> BaseModel { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Library> Libraries { get; set; }
-        
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
