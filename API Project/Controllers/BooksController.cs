@@ -31,5 +31,23 @@ namespace API_Project.Controllers
             await bookService.GetBookByName(name);
             return (IEnumerable<Book>)Ok(name);
         }
+        [HttpPut]
+        public async Task<IEnumerable<Book>> AddBook(Book book)
+        {
+           await bookService.AddBook(book);
+            return (IEnumerable<Book>)Ok();
+        }
+        [HttpPost]
+        public async Task<IEnumerable<Book>>UpdateBook(Book book)
+        {
+            await bookService.UpdateBook(book);
+            return (IEnumerable<Book>)Ok();
+        }
+        [HttpDelete]
+        public async void RemoveBook(string name)
+        {
+            await bookService.RemoveBook(name);
+            return Ok();
+        }
     }
 }

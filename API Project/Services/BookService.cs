@@ -49,10 +49,10 @@ namespace API_Project.Controllers
             return null;
         }
 
-        public async void RemoveBook(Guid guid)
+        public async void RemoveBook(string name)
         {
             var result = await appContext.Books
-                .FirstOrDefaultAsync(e => e.Id == guid);
+                .FirstOrDefaultAsync(e => e.Name == name);
         }
 
     }
