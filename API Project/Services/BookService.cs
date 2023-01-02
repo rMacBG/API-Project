@@ -19,10 +19,10 @@ namespace API_Project.Controllers
             return await appContext.Books.ToListAsync();
         }
 
-        public async Task<Book> GetBookById(Guid guid)
+        public async Task<Book> GetBookByName(string name)
         {
             return await appContext.Books
-                .FirstOrDefaultAsync(e => e.Id == guid);
+                .FirstOrDefaultAsync(e => e.Name == name);
         }
 
         public async Task<Book> AddBook(Book book)

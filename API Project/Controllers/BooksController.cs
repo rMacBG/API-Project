@@ -16,17 +16,20 @@ namespace API_Project.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooks()
         {
-            try
+           return await bookService.GetBooks();
+        }
+        [HttpGet("{name}")]
+        public async Task<IEnumerable<Book>> GetBookById(string name)
+        {
+            if (name == null)
             {
-                return (await bookService.GetBooks()).ToList();
-            }
-            catch (Exception)
-            {
+                return (IEnumerable<Book>)BadRequest();
 
-                throw;
             }
+            await bookService.GetBookByName(name);
+            return (IEnumerable<Book>)Ok(name);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace API_Models.Models
 {
     public class Genre : BaseModel
     {
+        
         public string GenreName { get; set; }
     }
 }

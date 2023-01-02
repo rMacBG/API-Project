@@ -6,7 +6,7 @@ namespace API_Project.Controllers
     {
         
         Task<IEnumerable<Book>> GetBooks();
-        Task<Book> GetBookById(Guid guid);
+        Task<Book> GetBookByName(string name);
         Task<Book> AddBook(Book book);
         Task<Book> UpdateBook(Book book);
         void RemoveBook(Guid guid);
