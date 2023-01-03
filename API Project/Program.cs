@@ -1,4 +1,5 @@
 using API_Models.Context;
+using API_Project.Controllers;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -9,7 +10,9 @@ var connectionString = builder.Configuration.GetConnectionString("ConnectionStri
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<LibContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("API Project")));
+builder.Services.AddDbContext<LibContext>(options => options
+.UseSqlServer(connectionString, b => b.MigrationsAssembly("API Project")));
+builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
 

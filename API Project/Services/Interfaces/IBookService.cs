@@ -9,6 +9,6 @@ namespace API_Project.Controllers
         Task<Book> GetBookByName(string name);
         Task<Book> AddBook(Book book);
         Task<Book> UpdateBook(Book book);
-        void RemoveBook(string name);
+        Task<Book> RemoveBook(Guid guid);
     }
 }

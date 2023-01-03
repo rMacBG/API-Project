@@ -49,10 +49,33 @@ namespace API_Project.Controllers
             return null;
         }
 
-        public async void RemoveBook(string name)
+        public async Task<Book> RemoveBook(Guid guid)
         {
             var result = await appContext.Books
-                .FirstOrDefaultAsync(e => e.Name == name);
+                .FirstOrDefaultAsync(e => e.Id == guid);
+            if (result != null)
+            {
+                appContext.Books.Remove(result);
+                await appContext.SaveChangesAsync();
+            }
+            return null;
+    //         try
+    //        {
+    //            var owner = _repository.Owner.GetOwnerById(id);
+    //            if (owner == null)
+    //            {
+    //                _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+    //                return NotFound();
+    //            }
+    //            _repository.Owner.DeleteOwner(owner);
+    //            _repository.Save();
+    //            return NoContent();
+    //        }
+    //catch (Exception ex)
+    //        {
+    //            _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
+    //            return StatusCode(500, "Internal server error");
+    //        }
         }
 
     }
