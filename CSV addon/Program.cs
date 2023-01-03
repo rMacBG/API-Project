@@ -1,10 +1,29 @@
-﻿namespace CSV_addon
+﻿using API_Models;
+using CsvHelper;
+using CsvHelper.Configuration;
+using System.Globalization;
+using System.Text;
+
+namespace CSV_addon
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
-        {
-            
+        void main(string[] args) { 
+
+            var fileName = @"<C:\Users\vlady\source\repos\src\API Project\CSV addon\CSV\books.csv>";
+            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Encoding = Encoding.UTF8,
+                Delimiter = ","
+            };
+            using (var fs = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                using (var reader = new StreamReader(fs, Encoding.UTF8)) 
+                using (var csv = new CsvReader(reader, configuration))
+                {
+                    var data = csv.GetRecords<Book>
+                }
+            }
         }
     }
 }
