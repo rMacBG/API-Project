@@ -8,7 +8,7 @@ namespace CSV_addon
 {
     public class Program
     {
-        void main(string[] args) { 
+       public static void Main(string[] args) { 
 
             var fileName = @"<C:\Users\vlady\source\repos\src\API Project\CSV addon\CSV\books.csv>";
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -21,7 +21,11 @@ namespace CSV_addon
                 using (var reader = new StreamReader(fs, Encoding.UTF8)) 
                 using (var csv = new CsvReader(reader, configuration))
                 {
-                    var data = csv.GetRecords<Book>
+                    var data = csv.GetRecords<Book>();
+                    foreach (var book in data)
+                    {
+
+                    }
                 }
             }
         }

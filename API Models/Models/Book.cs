@@ -5,7 +5,7 @@ namespace API_Models
 {
     public class Book : BaseModel
     {
-       [StringLength(50)]
+       
         public string Name { get; set; }
        
         public string Author { get; set; }

@@ -25,7 +25,8 @@ namespace API_Project.Controllers
         {
             if (name == null)
             {
-                return (IEnumerable<Book>)BadRequest();
+                return (IEnumerable<Book>)NotFound();
+                    //(IEnumerable<Book>)BadRequest(); 
 
             }
             await bookService.GetBookByName(name);
@@ -46,6 +47,10 @@ namespace API_Project.Controllers
         [HttpDelete]
         public async Task<IEnumerable<Book>> RemoveBook(Guid guid)
         {
+            if (guid == null)
+            {
+                return (IEnumerable<Book>)NotFound();
+            }
             bookService.RemoveBook(guid);
             return (IEnumerable<Book>)Ok();
         }

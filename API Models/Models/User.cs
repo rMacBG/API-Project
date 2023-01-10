@@ -9,9 +9,10 @@ namespace API_Models.Models
 {
     public class User : BaseModel
     {
-        
-        
+
+        [JsonIgnore]
         public string Name { get; set; }
+        [JsonIgnore]
     
         public string Password { get; set; }
     }

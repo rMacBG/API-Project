@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using API_Models.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace API_Models.Context
 {
-    public class LibContext : IdentityDbContext
+    public class LibContext : IdentityDbContext<IdentityUser>
     {
         public LibContext(DbContextOptions options) : base(options)
         {
