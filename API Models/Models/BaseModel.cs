@@ -15,6 +15,7 @@ namespace API_Models.Models
         {
             this.Id = Guid.NewGuid();
         }
+        [Key]
         public Guid Id { get; set; }
         
     } 

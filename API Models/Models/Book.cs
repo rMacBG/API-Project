@@ -8,7 +8,7 @@ namespace API_Models
        
         public string Name { get; set; }
        
-        public string Author { get; set; }
+        public Author Author { get; set; }
         
         public string ReleaseYear { get; set; }
         [Range(1, 2500)]

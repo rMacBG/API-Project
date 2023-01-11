@@ -13,7 +13,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibContext>(options => options
 .UseSqlServer(connectionString, b => b.MigrationsAssembly("API Project")));
 builder.Services.AddScoped<IBookService, BookService>();
-
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("AllowAll", builder =>
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+});
 var app = builder.Build();
 
 
