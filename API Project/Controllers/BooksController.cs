@@ -21,38 +21,38 @@ namespace API_Project.Controllers
            return await bookService.GetBooks();
         }
         [HttpGet("{name}")]
-        public async Task<IEnumerable<Book>> GetBookById(string name)
+        public async Task<ActionResult<Book>> GetBookById(string name)
         {
             if (name == null)
             {
-                return (IEnumerable<Book>)NotFound();
+                return NotFound();
                     //(IEnumerable<Book>)BadRequest(); 
 
             }
             await bookService.GetBookByName(name);
-            return (IEnumerable<Book>)Ok(name);
+            return Ok(name);
         }
         [HttpPost]
-        public async Task<IEnumerable<Book>> AddBook(Book book)
+        public async Task<ActionResult<Book>> AddBook(Book book)
         {
            await bookService.AddBook(book);
-            return (IEnumerable<Book>)Ok();
+            return Ok();
         }
         [HttpPut]
-        public async Task<IEnumerable<Book>>UpdateBook(Book book)
+        public async Task<ActionResult<Book>>UpdateBook(Book book)
         {
             await bookService.UpdateBook(book);
-            return (IEnumerable<Book>)Ok();
+            return Ok();
         }
         [HttpDelete]
-        public async Task<IEnumerable<Book>> RemoveBook(Guid guid)
+        public async Task<ActionResult<Book>> RemoveBook(Guid guid)
         {
             if (guid == null)
             {
-                return (IEnumerable<Book>)NotFound();
+                return NotFound();
             }
             bookService.RemoveBook(guid);
-            return (IEnumerable<Book>)Ok();
+            return Ok();
         }
     }
 }

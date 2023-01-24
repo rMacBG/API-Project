@@ -25,7 +25,18 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "AppSettings": {
+        "Secret": "Tokenin"
+      },
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore":  "Warning"
+        }
       }
     }
   }
+
 }
+

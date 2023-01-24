@@ -10,10 +10,12 @@ namespace API_Models.Models
     public class User : BaseModel
     {
 
+        
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public Role role { get; set; }
         [JsonIgnore]
-        public string Name { get; set; }
-        [JsonIgnore]
-    
         public string Password { get; set; }
+      
     }
 }

@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models
+namespace Authorization_Library.Helpers
 {
-    public class Library : BaseModel
+    public class AppSettings
     {
-        public string LibraryName { get; set; }
-
-       
+        public string Secret { get; set; }
     }
 }

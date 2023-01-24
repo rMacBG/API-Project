@@ -16,9 +16,8 @@ namespace API_Models
         public ICollection<Genre> Genre { get; set; }
 
         [StringLength(15000)]
-        public string Description { get; set; }
+        public Description Description { get; set; }
 
-        public ICollection<Library> Libraries { get; set; }
 
     }
 
