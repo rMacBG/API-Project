@@ -1,5 +1,9 @@
 using API_Models.Context;
 using API_Project.Controllers;
+using API_Project.Helpers;
+using API_Project.Services;
+using API_Project.Services.Interfaces;
+using Authorization_Library.Helpers;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -13,6 +17,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibContext>(options => options
 .UseSqlServer(connectionString, b => b.MigrationsAssembly("API Project")));
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 builder.Services.AddCors(o =>
 {
     o.AddPolicy("AllowAll", builder =>
@@ -20,9 +28,11 @@ builder.Services.AddCors(o =>
     .AllowAnyMethod()
     .AllowAnyHeader());
 });
+
 var app = builder.Build();
 
-
+app.UseMiddleware<ErrorsHandler>();
+app.UseMiddleware<JwtMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace API_Models.Models
 {
-    internal class Description
+    public class Description : BaseModel
     {
+        public string BookDescription { get; set; }
     }
 }

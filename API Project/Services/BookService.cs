@@ -3,6 +3,7 @@ using API_Models.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 
 namespace API_Project.Controllers
 {
@@ -59,25 +60,28 @@ namespace API_Project.Controllers
                 await appContext.SaveChangesAsync();
             }
             return null;
-    //         try
-    //        {
-    //            var owner = _repository.Owner.GetOwnerById(id);
-    //            if (owner == null)
-    //            {
-    //                _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
-    //                return NotFound();
-    //            }
-    //            _repository.Owner.DeleteOwner(owner);
-    //            _repository.Save();
-    //            return NoContent();
-    //        }
-    //catch (Exception ex)
-    //        {
-    //            _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
-    //            return StatusCode(500, "Internal server error");
-    //        }
+            //         try
+            //        {
+            //            var owner = _repository.Owner.GetOwnerById(id);
+            //            if (owner == null)
+            //            {
+            //                _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+            //                return NotFound();
+            //            }
+            //            _repository.Owner.DeleteOwner(owner);
+            //            _repository.Save();
+            //            return NoContent();
+            //        }
+            //catch (Exception ex)
+            //        {
+            //            _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
+            //            return StatusCode(500, "Internal server error");
+            //        }
         }
 
+     
+
+    
     }
 
     }

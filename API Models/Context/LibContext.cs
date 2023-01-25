@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace API_Models.Context
 {
-    public class LibContext : IdentityDbContext<IdentityUser>
+    public class LibContext : DbContext //IdentityDbContext<IdentityUser>
     {
         public LibContext(DbContextOptions options) : base(options)
         {

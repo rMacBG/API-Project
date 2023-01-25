@@ -7,10 +7,10 @@ namespace API_Project.Services.Interfaces
     {
         AuthenticationResponse Authenticate(AuthenticationRequest model);
         IEnumerable<User> GetAll();
-        User GetById(int id);
+        User GetById(Guid id);
         void Register(RegisterRequest model);
-        void Update(int id, UpdateRequest user);
-        void Delete(int id);
+        void Update(Guid id, UpdateRequest user);
+        void Delete(Guid id);
 
     }
 }

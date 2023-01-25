@@ -1,6 +1,8 @@
 ﻿namespace API_Models.Models
 {
-    public class Role
+    public enum Role
     {
+        Admin,
+        User
     }
 }
