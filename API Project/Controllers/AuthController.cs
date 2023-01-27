@@ -2,6 +2,7 @@
 using API_Models.Models;
 using API_Models.Models.AuthRequests;
 using API_Models.Models.requests;
+using API_Models.Models.VModels;
 using API_Project.Services.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -75,9 +76,48 @@ namespace API_Project.Controllers
 
             return BadRequest();
         }
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
-        public Task<IActionResult> Login([FromRoute])
+        public async Task<IActionResult> Login([FromRoute] LoginVModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await userManager.FindByEmailAsync(model.Username);
+
+                if (existingUser != null)
+                {
+                    return BadRequest(new AuthResponse
+                    {
+
+                        Errors = new List<string>()
+                {
+                    "Login unsuccessful!"
+                },
+                        Result = false
+                    });
+                }
+                var Correct = await userManager.CheckPasswordAsync(existingUser, model.Password);
+                if (!Correct)
+                {
+                    return BadRequest(new AuthResponse()
+                    {
+                        Errors = new List<string>()
+                    {
+                        "Invalid Credentials"
+                    },
+                        Result = false
+                    });
+                }
+                var jwtToken = GenerateJwtToken(existingUser);
+                return Ok(new AuthResponse()
+                {
+                    Result = true,
+                    Token = jwtToken,
+                });
+            }
+            return BadRequest();
+            
+        }
 
         private string GenerateJwtToken(IdentityUser user)
         {
