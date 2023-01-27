@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API Models", "API Models\AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSV addon", "CSV addon\CSV addon.csproj", "{84ECC79C-47E2-40E4-938F-A0421C01FD9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization Library", "Authorization Library\Authorization Library.csproj", "{BBD81DF8-6A8B-4A4B-B12F-CCF4534C385B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{84ECC79C-47E2-40E4-938F-A0421C01FD9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84ECC79C-47E2-40E4-938F-A0421C01FD9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84ECC79C-47E2-40E4-938F-A0421C01FD9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBD81DF8-6A8B-4A4B-B12F-CCF4534C385B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBD81DF8-6A8B-4A4B-B12F-CCF4534C385B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBD81DF8-6A8B-4A4B-B12F-CCF4534C385B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBD81DF8-6A8B-4A4B-B12F-CCF4534C385B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

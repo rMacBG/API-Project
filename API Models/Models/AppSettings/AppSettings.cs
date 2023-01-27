@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models
+namespace API_Models.Models.AppSettings
 {
-    public class Description : BaseModel
+    public class AppSettings
     {
-        public string BookDescription { get; set; }
+        public string Secret { get; set; }
     }
 }

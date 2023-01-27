@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace API_Models.Models
 {
-    public class Genre : BaseModel
+    public enum Genre
     {
         
-        public string GenreName { get; set; }
+        
     }
 }

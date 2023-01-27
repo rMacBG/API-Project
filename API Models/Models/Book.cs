@@ -13,10 +13,10 @@ namespace API_Models
         public string ReleaseYear { get; set; }
         [Range(1, 2500)]
         public int BookPages { get; set; }
-        public ICollection<Genre> Genre { get; set; }
+        public Genre Genre { get; set; }
 
         [StringLength(15000)]
-        public Description Description { get; set; }
+        public string Description { get; set; }
 
 
     }

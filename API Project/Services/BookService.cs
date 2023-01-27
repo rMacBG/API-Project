@@ -17,7 +17,11 @@ namespace API_Project.Controllers
 
         public async Task<IEnumerable<Book>> GetBooks()
         {
-            return await appContext.Books.ToListAsync();
+            var res = appContext.Books.Select(x => new Book()
+            {
+                Name= x.Name
+            }).ToListAsync();
+            return await res;
         }
 
         public async Task<Book> GetBookByName(string name)
@@ -28,6 +32,7 @@ namespace API_Project.Controllers
 
         public async Task<Book> AddBook(Book book)
         {
+            book.Id = Guid.NewGuid();
             var result = await appContext.Books.AddAsync(book);
             await appContext.SaveChangesAsync();
             return result.Entity;
@@ -40,7 +45,6 @@ namespace API_Project.Controllers
             {
                 result.Name = book.Name;
                 result.Author = book.Author;
-                result.Description = book.Description;
                 result.BookPages = book.BookPages;
                 result.ReleaseYear = book.ReleaseYear;
 
@@ -50,10 +54,10 @@ namespace API_Project.Controllers
             return null;
         }
 
-        public async Task<Book> RemoveBook(Guid guid)
+        public async Task<Book> RemoveBook(Guid id)
         {
             var result = await appContext.Books
-                .FirstOrDefaultAsync(e => e.Id == guid);
+                .FirstOrDefaultAsync(e => e.Id == id);
             if (result != null)
             {
                 appContext.Books.Remove(result);

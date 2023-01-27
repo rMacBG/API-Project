@@ -1,4 +1,5 @@
 ﻿
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,14 +11,15 @@ namespace API_Models.Models
 {
     public class BaseModel
     {
-        
         public BaseModel()
         {
-            this.Id = Guid.NewGuid();
+            Id = Guid.NewGuid();
         }
+
         [Key]
         public Guid Id { get; set; }
         
+
     } 
 
     }

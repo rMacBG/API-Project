@@ -41,6 +41,10 @@ namespace API_Project.Controllers
         [HttpPut]
         public async Task<ActionResult<Book>>UpdateBook(Book book)
         {
+            if (book == null)
+            {
+                return NotFound();
+            }
             await bookService.UpdateBook(book);
             return Ok();
         }
