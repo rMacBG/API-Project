@@ -11,12 +11,12 @@ namespace API_Models.Models.AuthRequests
     {
         [Required(ErrorMessage = "Username Required!")]
         public string Username { get; set; }
-        [Required(ErrorMessage = "Email Required!")]
+        [Required(ErrorMessage = "E-mail Required!")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password Required")]
-        [Compare ("ConfirmPassword")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required(ErrorMessage ="Password is not the same as the first given one")]
-        public string ConfirmPassword { get; set; }
+       
+       
     }
 }

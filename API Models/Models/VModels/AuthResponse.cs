@@ -8,7 +8,8 @@ namespace API_Models.Models.requests
 {
     public class AuthResponse
     {
-        public string Username { get; set; }
         public string Token { get; set; }
+        public bool Result { get; set; }
+        public List<string> Errors { get; set; }
     }
 }
