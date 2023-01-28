@@ -1,7 +1,10 @@
 ﻿using API_Models;
 using API_Models.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 
 namespace API_Project.Controllers
 {
@@ -23,7 +26,7 @@ namespace API_Project.Controllers
            return await bookService.GetBooks();
         }
         [HttpGet("Get Books by Id")]
-        public async Task<ActionResult<Book>> GetBookById([FromRoute] string name)
+        public async Task<ActionResult<Book>> GetBookById([FromBody] string name)
         {
             if (name == null)
             {
@@ -36,14 +39,14 @@ namespace API_Project.Controllers
         }
         [HttpPost]
         [Route("Create a Book")]
-        public async Task<ActionResult<Book>> AddBook([FromRoute] Book book)
+        public async Task<ActionResult<Book>> AddBook([FromBody] Book book)
         {
            await bookService.AddBook(book);
             return Ok();
         }
         [HttpPut]
         [Route("Update a Book")]
-        public async Task<ActionResult<Book>>UpdateBook([FromRoute] Book book)
+        public async Task<ActionResult<Book>>UpdateBook([FromBody] Book book)
         {
             if (book == null)
             {
@@ -54,7 +57,7 @@ namespace API_Project.Controllers
         }
         [HttpDelete]
         [Route("Delete a Book")]
-        public async Task<ActionResult<Book>> RemoveBook([FromRoute] Guid guid)
+        public async Task<ActionResult<Book>> RemoveBook([FromBody] Guid guid)
         {
             if (guid == null)
             {

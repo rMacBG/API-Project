@@ -68,86 +68,113 @@ namespace API_Project.Controllers
                 {
                     return BadRequest(new AuthResponse()
         {
-            Result = true,
+                        Result = true,
                         Errors = new List<string>()
                         {
                             "Email already exists!"
                         }
                     });
                 }
-    var user = new User()
-    {
-        Email = model.Email,
-        UserName = model.Username,
+                var user = new User()
+                {
+                    Email = model.Email,
+                    UserName = model.Username,
 
-    };
-    var creation = await userManager.CreateAsync(user, model.Password);
+                };
+                var create = await userManager.CreateAsync(user, model.Password);
                 
-                if (creation.Succeeded)
+                if (create.Succeeded)
                 {
                     var token = GenerateJwtToken(user);
                     return Ok(new AuthResponse()
-    {
-        Result = true,
+                    {
+                        Result = true,
                         Token = token,
                     });
                     
 
                 }
-return BadRequest(new AuthResponse()
-{
-    Errors = new List<string>()
+                    return BadRequest(new AuthResponse()
+            {
+                     Errors = new List<string>()
                     {
                         "Server Error"
                     },
-    Result = false
-});
+                        Result = false
+                    });
 
             }
 
-            return BadRequest();
+                    return BadRequest();
 
         }
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginVModel model)
-        {
+        {       
             if (ModelState.IsValid)
             {
-                var existingUser = await userManager.FindByEmailAsync(model.Username);
-
-                if (existingUser != null)
+                var checkUser = await userManager.FindByNameAsync(model.Username);
+                if (checkUser != null)
                 {
-                    return BadRequest(new AuthResponse
+                    var correct = await userManager.CheckPasswordAsync(checkUser, model.Password);
+                    if (correct)
                     {
-
-                        Errors = new List<string>()
-                {
-                    "Login unsuccessful!"
-                },
-                        Result = false
-                    });
-                }
-                var Correct = await userManager.CheckPasswordAsync(existingUser, model.Password);
-                if (!Correct)
-                {
+                        var token = GenerateJwtToken(checkUser);
+                        return Ok(new AuthResponse()
+                        {
+                            Result = true,
+                            Token = token,
+                        });
+                    }
                     return BadRequest(new AuthResponse()
                     {
-                        Errors = new List<string>()
-                    {
-                        "Invalid Credentials"
-                    },
-                        Result = false
-                    });
+                        Errors = new List<string>() 
+                        { 
+                            "Username or Password are incorrect!"
+                        }
+
+                    });   
                 }
-                  var jwtToken = GenerateJwtToken(existingUser);
-                return Ok(new AuthResponse()
-                {
-                    Result = true,
-                    Token = jwtToken,
-                });
+              
             }
             return BadRequest();
+        //    if (ModelState.IsValid)
+        //    {
+        //        var existingUser = await userManager.FindByNameAsync(model.Username);
+
+        //        if (existingUser != null)
+        //        {
+        //            return BadRequest(new AuthResponse
+        //            {
+
+        //                Errors = new List<string>()
+        //        {
+        //            "Login unsuccessful!"
+        //        },
+        //                Result = false
+        //            });
+        //        }
+        //        var Correct = await userManager.CheckPasswordAsync(existingUser, model.Password);
+        //        if (!Correct)
+        //        {
+        //            return BadRequest(new AuthResponse()
+        //            {
+        //                Errors = new List<string>()
+        //            {
+        //                "Invalid Credentials"
+        //            },
+        //                Result = false
+        //            });
+        //        }
+        //          var jwtToken = GenerateJwtToken(existingUser);
+        //        return Ok(new AuthResponse()
+        //        {
+        //            Result = true,
+        //            Token = jwtToken,
+        //        });
+        //    }
+        //    return BadRequest();
 
         }
 
@@ -162,12 +189,10 @@ return BadRequest(new AuthResponse()
                 {
                     new Claim("Id", user.Id),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Email, value:user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
                 }),
                 Expires = DateTime.Now.AddMinutes(4),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
