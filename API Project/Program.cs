@@ -1,4 +1,3 @@
-using API_Models.Configs;
 using API_Models.Context;
 using API_Project.Controllers;
 using API_Project.Services;
@@ -10,51 +9,60 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity.UI;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.Extensions.DependencyInjection;
+using API_Models.Models;
+using API_Models.Models.AppSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LibContext>(options => options
 .UseSqlServer(connectionString, b => b.MigrationsAssembly("API Project")));
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddIdentity<IdentityUser>(o => o.options.SignIn.RequiredEmailConfirmedAccountFalse).
+builder.Services.AddTransient<UserManager<User>>();
+//builder.Services.AddIdentityCore<IdentityUser>(o => o.options.SignIn.RequiredEmailConfirmedAccount = false).
 //    addEntityFrameworkStores<LibContext>();
-//builder.Services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<LibContext>
- //   ().AddDefaultTokenProviders();
- 
+
 builder.Services.AddAuthentication( o =>
     {
         o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    }).AddJwtBearer(o =>
+    })
+    .AddJwtBearer(o =>
     {
-        var key = Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
         o.SaveToken= true;
-
         o.TokenValidationParameters = new TokenValidationParameters()
         {
-           ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = true,
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["JwtConfig:ValidAudience"],
-            ValidIssuer = builder.Configuration["JwtConfig:ValidIssuer"],
+            ValidAudience = builder.Configuration["Jwt:ValidAudience"],
+            ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
             RequireExpirationTime = true,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-            //Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Secret"]
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]))
+            
         };
     });
-builder.Services.AddDefaultIdentity<IdentityUser>(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
+builder.Services.AddDefaultIdentity<User>().AddEntityFrameworkStores<LibContext>().AddDefaultTokenProviders();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 1;
+    options.Password.RequiredUniqueChars = 1;
+});//(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
+builder.Services.AddAuthorization();
 builder.Services.AddCors(o =>
 {
     o.AddPolicy("AllowAll", builder =>
@@ -75,8 +83,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 app.MapControllers();
 
 app.Run();

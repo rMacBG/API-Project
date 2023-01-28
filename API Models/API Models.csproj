@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Compile Remove="Models\Role.cs" />
-    <Compile Remove="Models\User.cs" />
   </ItemGroup>
 
   <ItemGroup>

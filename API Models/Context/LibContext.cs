@@ -9,15 +9,15 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace API_Models.Context
 {
-    public class LibContext : IdentityDbContext
+    public class LibContext : IdentityDbContext<User>
     {
         public LibContext(DbContextOptions options) : base(options)
         {
 
         }
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Author> Authors { get; set; }
-       
+        public DbSet<Book>? Books { get; set; }
+        public DbSet<Author>? Authors { get; set; }
+
 
 
 
@@ -28,5 +28,7 @@ namespace API_Models.Context
         //        @"Server=DESKTOP-APPA48Q;Database=LibraryDb;Trusted_Connection=True");
         //}
     }
-    }
+}
+
+   
 

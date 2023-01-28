@@ -1,10 +1,9 @@
-﻿using API_Models.Configs;
+﻿using API_Models.Context;
 using API_Models.Models;
 using API_Models.Models.AuthRequests;
 using API_Models.Models.requests;
 using API_Models.Models.VModels;
 using API_Project.Services.Interfaces;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,64 +20,97 @@ namespace API_Project.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
-        public AuthController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+
+        public AuthController(UserManager<User> userManager, IConfiguration configuration)
         {
-            this.userManager = userManager;
+
             this.configuration = configuration;
+            this.userManager = userManager;
+
         }
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromRoute] RegisterVModel model)
+        [Route ("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterVModel model)
         {
+
+        //    var checkUser = await userManager.FindByEmailAsync(model.Email);
+        //    if (checkUser == null)
+        //    {
+        //        var user = new User()
+        //        {
+        //            Email = model.Email,
+        //            UserName = model.Username
+        //        };
+        //        var result = await userManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            return Ok(result);
+        //            var token = GenerateJwtToken(user);
+        //            return Ok(new AuthResponse()
+        //            {
+        //                Token = token,
+        //                Result = true,
+        //            });
+        //        }
+        //        return BadRequest();
+        //    }
+
+        //    return Ok();
+
+
            
             if (ModelState.IsValid)
             {
-                var userExists = await userManager.FindByEmailAsync(model.Email);
-                if (userExists != null)
+                var checkUser = await userManager.FindByEmailAsync(model.Email);
+                if (checkUser != null)
                 {
                     return BadRequest(new AuthResponse()
-                    {
-                        Result= true,
+        {
+            Result = true,
                         Errors = new List<string>()
                         {
                             "Email already exists!"
                         }
                     });
                 }
-                var newUser = new IdentityUser()
+    var user = new User()
+    {
+        Email = model.Email,
+        UserName = model.Username,
+
+    };
+    var creation = await userManager.CreateAsync(user, model.Password);
+                
+                if (creation.Succeeded)
                 {
-                    Email = model.Email,
-                    UserName = model.Username,
-               
-                };
-                var isCreated = await userManager.CreateAsync(newUser, model.Password);
-                if (isCreated.Succeeded)
-                {
-                    var token = GenerateJwtToken(newUser);
+                    var token = GenerateJwtToken(user);
                     return Ok(new AuthResponse()
-                    {
-                        Result = true,
+    {
+        Result = true,
                         Token = token,
                     });
+                    
+
                 }
-                return BadRequest(new AuthResponse()
-                {
-                    Errors = new List<string>()
+return BadRequest(new AuthResponse()
+{
+    Errors = new List<string>()
                     {
                         "Server Error"
                     },
-                    Result = false
-                });
+    Result = false
+});
 
             }
 
             return BadRequest();
+
         }
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromRoute] LoginVModel model)
+        public async Task<IActionResult> Login([FromBody] LoginVModel model)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +140,7 @@ namespace API_Project.Controllers
                         Result = false
                     });
                 }
-                var jwtToken = GenerateJwtToken(existingUser);
+                  var jwtToken = GenerateJwtToken(existingUser);
                 return Ok(new AuthResponse()
                 {
                     Result = true,
@@ -116,13 +148,13 @@ namespace API_Project.Controllers
                 });
             }
             return BadRequest();
-            
+
         }
 
         private string GenerateJwtToken(IdentityUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(configuration.GetSection("JwtConfig:Secret").Value);
+            var key = Encoding.ASCII.GetBytes(configuration.GetSection("Jwt:Secret").Value);
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
@@ -137,10 +169,10 @@ namespace API_Project.Controllers
                 Expires = DateTime.Now.AddMinutes(4),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
-            var token =  jwtTokenHandler.CreateToken(tokenDescriptor);
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
 
-           
+
         }
 
     }

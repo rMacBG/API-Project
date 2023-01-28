@@ -16,12 +16,14 @@ namespace API_Project.Controllers
         }
 
         [HttpGet]
+        [Route("Get All Books")]
+        
         public async Task<IEnumerable<Book>> GetBooks()
         {
            return await bookService.GetBooks();
         }
-        [HttpGet("{name}")]
-        public async Task<ActionResult<Book>> GetBookById(string name)
+        [HttpGet("Get Books by Id")]
+        public async Task<ActionResult<Book>> GetBookById([FromRoute] string name)
         {
             if (name == null)
             {
@@ -33,13 +35,15 @@ namespace API_Project.Controllers
             return Ok(name);
         }
         [HttpPost]
-        public async Task<ActionResult<Book>> AddBook(Book book)
+        [Route("Create a Book")]
+        public async Task<ActionResult<Book>> AddBook([FromRoute] Book book)
         {
            await bookService.AddBook(book);
             return Ok();
         }
         [HttpPut]
-        public async Task<ActionResult<Book>>UpdateBook(Book book)
+        [Route("Update a Book")]
+        public async Task<ActionResult<Book>>UpdateBook([FromRoute] Book book)
         {
             if (book == null)
             {
@@ -49,7 +53,8 @@ namespace API_Project.Controllers
             return Ok();
         }
         [HttpDelete]
-        public async Task<ActionResult<Book>> RemoveBook(Guid guid)
+        [Route("Delete a Book")]
+        public async Task<ActionResult<Book>> RemoveBook([FromRoute] Guid guid)
         {
             if (guid == null)
             {
