@@ -30,37 +30,11 @@ namespace API_Project.Controllers
             this.userManager = userManager;
 
         }
+        [AllowAnonymous]
         [HttpPost]
         [Route ("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterVModel model)
+        public async Task<IActionResult> Register([FromForm] RegisterVModel model)
         {
-
-        //    var checkUser = await userManager.FindByEmailAsync(model.Email);
-        //    if (checkUser == null)
-        //    {
-        //        var user = new User()
-        //        {
-        //            Email = model.Email,
-        //            UserName = model.Username
-        //        };
-        //        var result = await userManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            return Ok(result);
-        //            var token = GenerateJwtToken(user);
-        //            return Ok(new AuthResponse()
-        //            {
-        //                Token = token,
-        //                Result = true,
-        //            });
-        //        }
-        //        return BadRequest();
-        //    }
-
-        //    return Ok();
-
-
-           
             if (ModelState.IsValid)
             {
                 var checkUser = await userManager.FindByEmailAsync(model.Email);
@@ -91,8 +65,6 @@ namespace API_Project.Controllers
                         Result = true,
                         Token = token,
                     });
-                    
-
                 }
                     return BadRequest(new AuthResponse()
             {
@@ -108,9 +80,10 @@ namespace API_Project.Controllers
                     return BadRequest();
 
         }
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginVModel model)
+        public async Task<IActionResult> Login([FromForm] LoginVModel model)
         {       
             if (ModelState.IsValid)
             {
@@ -133,49 +106,10 @@ namespace API_Project.Controllers
                         { 
                             "Username or Password are incorrect!"
                         }
-
                     });   
                 }
-              
             }
             return BadRequest();
-        //    if (ModelState.IsValid)
-        //    {
-        //        var existingUser = await userManager.FindByNameAsync(model.Username);
-
-        //        if (existingUser != null)
-        //        {
-        //            return BadRequest(new AuthResponse
-        //            {
-
-        //                Errors = new List<string>()
-        //        {
-        //            "Login unsuccessful!"
-        //        },
-        //                Result = false
-        //            });
-        //        }
-        //        var Correct = await userManager.CheckPasswordAsync(existingUser, model.Password);
-        //        if (!Correct)
-        //        {
-        //            return BadRequest(new AuthResponse()
-        //            {
-        //                Errors = new List<string>()
-        //            {
-        //                "Invalid Credentials"
-        //            },
-        //                Result = false
-        //            });
-        //        }
-        //          var jwtToken = GenerateJwtToken(existingUser);
-        //        return Ok(new AuthResponse()
-        //        {
-        //            Result = true,
-        //            Token = jwtToken,
-        //        });
-        //    }
-        //    return BadRequest();
-
         }
 
         private string GenerateJwtToken(IdentityUser user)

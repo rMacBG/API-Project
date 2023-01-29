@@ -20,13 +20,6 @@ namespace API_Models.Context
 
 
 
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-
-        //    optionsBuilder.UseSqlServer(
-        //        @"Server=DESKTOP-APPA48Q;Database=LibraryDb;Trusted_Connection=True");
-        //}
     }
 }
 

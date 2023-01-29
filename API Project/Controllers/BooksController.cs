@@ -39,7 +39,7 @@ namespace API_Project.Controllers
         }
         [HttpPost]
         [Route("Create a Book")]
-        public async Task<ActionResult<Book>> AddBook([FromBody] Book book)
+        public async Task<ActionResult<Book>> AddBook([FromForm] Book book)
         {
            await bookService.AddBook(book);
             return Ok();
