@@ -1,4 +1,5 @@
 ﻿using API_Models;
+using API_Models.Models.VModels;
 
 namespace API_Project.Controllers
 {
@@ -9,6 +10,6 @@ namespace API_Project.Controllers
         Task<Book> GetBookByName(string name);
         Task<Book> AddBook(Book book);
         Task<Book> UpdateBook(Book book);
-        Task<Book> RemoveBook(Guid id);
+        Task<Book> RemoveBook(string name);
     }
 }

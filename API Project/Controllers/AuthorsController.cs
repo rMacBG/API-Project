@@ -21,7 +21,7 @@ namespace API_Project.Controllers
            
         }
         [HttpPost("create")]
-        public async Task<ActionResult<Author>> Create([FromRoute] Author author)
+        public async Task<IActionResult> Create([FromRoute] Author author)
         {
             if (author == null)
             {
@@ -31,7 +31,7 @@ namespace API_Project.Controllers
             return Ok(author);
         }
         [HttpPut]
-        public async Task<ActionResult<Author>> Update([FromRoute] Author author)
+        public async Task<IActionResult> Update([FromRoute] Author author)
         {
             if (author == null)
             {
@@ -41,14 +41,16 @@ namespace API_Project.Controllers
             return Ok(author);
         }
         [HttpDelete]
-        public async Task<ActionResult<Author>> Delete ([FromRoute] Guid id)
+        public async Task<IActionResult> Delete ([FromRoute] Guid id)
         {
-            if (id == null)
+            if (id != null)
             {
-                return NotFound();
+                await authorService.Delete(id);
+                return Ok();
+                
             }
-            await authorService.Delete(id);
-            return Ok();
+            return NotFound();
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using API_Models;
 using API_Models.Context;
+using API_Models.Models.VModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace API_Project.Controllers
         {
             this.bookService = bookService;
         }
-
+        [Authorize]
         [HttpGet]
         [Route("Get All Books")]
         
@@ -26,7 +27,8 @@ namespace API_Project.Controllers
            return await bookService.GetBooks();
         }
         [HttpGet("Get Books by Id")]
-        public async Task<ActionResult<Book>> GetBookById([FromBody] string name)
+        [AllowAnonymous]
+        public async Task<IActionResult> GetBookByName([FromBody] string name)
         {
             if (name == null)
             {
@@ -37,16 +39,32 @@ namespace API_Project.Controllers
             await bookService.GetBookByName(name);
             return Ok(name);
         }
+        
         [HttpPost]
         [Route("Create a Book")]
-        public async Task<ActionResult<Book>> AddBook([FromForm] Book book)
+        public async Task<IActionResult> AddBook([FromForm] BookCreateVModel model)
         {
-           await bookService.AddBook(book);
-            return Ok();
+            var book = new Book
+            {
+                Name = model.Name,
+                BookAuthor = model.BookAuthor,
+                Description = model.Description,
+                Category = model.Category,
+                ReleaseYear = model.ReleaseYear,
+                BookPages = model.BookPages,
+            };
+          var result = await bookService.AddBook(book);
+            return CreatedAtAction(
+                nameof(this.AddBook),
+                new
+                {
+                    result = result.ToString()
+                });
         }
+        
         [HttpPut]
         [Route("Update a Book")]
-        public async Task<ActionResult<Book>>UpdateBook([FromBody] Book book)
+        public async Task<IActionResult>UpdateBook([FromBody] Book book)
         {
             if (book == null)
             {
@@ -55,15 +73,16 @@ namespace API_Project.Controllers
             await bookService.UpdateBook(book);
             return Ok();
         }
+   
         [HttpDelete]
         [Route("Delete a Book")]
-        public async Task<ActionResult<Book>> RemoveBook([FromBody] Guid guid)
+        public async Task<IActionResult> RemoveBook([FromBody] string name)
         {
-            if (guid == null)
+            if (name == null)
             {
                 return NotFound();
             }
-            bookService.RemoveBook(guid);
+           await bookService.RemoveBook(name);
             return Ok();
         }
     }

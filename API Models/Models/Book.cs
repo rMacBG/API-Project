@@ -8,9 +8,9 @@ namespace API_Models
        
         public string Name { get; set; }
        
-        public Author Author { get; set; }
+        public ICollection<BookAuthor> BookAuthor { get; set; }
         public string Category { get; set; }
-        [StringLength(15000)]
+        [StringLength(500000)]
         public string Description { get; set; }
 
         public string ReleaseYear { get; set; }

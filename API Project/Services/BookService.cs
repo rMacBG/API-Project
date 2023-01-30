@@ -1,5 +1,6 @@
 ﻿using API_Models;
 using API_Models.Context;
+using API_Models.Models.VModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -44,7 +45,7 @@ namespace API_Project.Controllers
             if (result != null)
             {
                 result.Name = book.Name;
-                result.Author = book.Author;
+                result.BookAuthor = book.BookAuthor;
                 result.BookPages = book.BookPages;
                 result.ReleaseYear = book.ReleaseYear;
 
@@ -54,10 +55,10 @@ namespace API_Project.Controllers
             return null;
         }
 
-        public async Task<Book> RemoveBook(Guid id)
+        public async Task<Book> RemoveBook(string name)
         {
             var result = await appContext.Books
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Name == name);
             if (result != null)
             {
                 appContext.Books.Remove(result);

@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace API_Models.Models.VModels
 {
-    public class FileTransferModel
+    public class BookCreateVModel
     {
         public string Name { get; set; }
 
-        public List<BookAuthor> BookAuthor { get; set; }
+       public ICollection<BookAuthor> BookAuthor { get; set; }
         public string Category { get; set; }
+        [StringLength(15000)]
         public string Description { get; set; }
+
         public string ReleaseYear { get; set; }
-        public float AverageRating { get; set; }
+        [Range(1, 2500)]
         public int BookPages { get; set; }
-        public int RatingCount { get; set; }
+
     }
 }

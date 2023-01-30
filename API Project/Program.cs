@@ -15,14 +15,17 @@ using API_Models.Models.AppSettings;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 
-builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(
+    options =>
 {
     const string name = "token";
 
@@ -34,23 +37,28 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-    });
+    }
+   );
 
     options.OperationFilter<SecurityRequirementsOperationFilter>(true, name);
-});
+}
+);
 
 builder.Services
     .AddDbContext<LibContext>(options => options
 .UseSqlServer(connectionString, b => b
 .MigrationsAssembly("API Project")));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<UserManager<User>>();
 builder.Services.AddTransient<ICSVService, CSVService>();
+builder.Services
+    .AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<LibContext>();
 
-
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
 builder.Services.AddAuthentication( o =>
     {
         o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,24 +67,28 @@ builder.Services.AddAuthentication( o =>
     })
     .AddJwtBearer(o =>
     {
-        o.SaveToken= true;
+        o.SaveToken= false;
         o.TokenValidationParameters = new TokenValidationParameters()
         {
+            
             ValidateIssuerSigningKey = true,
             ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero,
             ValidAudience = builder.Configuration["Jwt:ValidAudience"],
-            ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-            RequireExpirationTime = true,
-            ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]))
+             ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
+           // RequireExpirationTime = true,
+           // ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key)
             
         };
     });
-builder.Services
-    .AddDefaultIdentity<User>()
-    .AddEntityFrameworkStores<LibContext>()
-    .AddDefaultTokenProviders();
+//builder.Services
+//    .AddDefaultIdentity<User>()
+//    .AddEntityFrameworkStores<LibContext>()
+//    .AddDefaultTokenProviders();
+
+   // .AddDefaultTokenProviders();
 builder.Services
     .Configure<IdentityOptions>(options =>
 {
@@ -88,21 +100,26 @@ builder.Services
     options.Password.RequiredUniqueChars = 1;
 });//(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
 builder.Services.AddAuthorization();
-builder.Services.AddCors(o =>
-{
-    o.AddPolicy("AllowAll", builder =>
-    builder.AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
-});
+//builder.Services.AddCors(o =>
+//{
+//    o.AddPolicy("AllowAll", builder =>
+//    builder.AllowAnyOrigin()
+//    .AllowAnyMethod()
+//    .AllowAnyHeader());
+//});
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var bookSeed = scope.ServiceProvider.GetRequiredService<ICSVService>();
+    await bookSeed.seed("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
+}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors();
+// app.UseCors();
 app.UseHttpsRedirection();
 
 

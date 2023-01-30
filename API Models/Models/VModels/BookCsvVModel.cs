@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace API_Models.Models.VModels
 {
-    public class FileTransferModel
+    public class BookCsvVModel
     {
+        public string Id { get; set; }
         public string Name { get; set; }
 
-        public List<BookAuthor> BookAuthor { get; set; }
+        public ICollection<BookAuthor> BookAuthor { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public string ReleaseYear { get; set; }

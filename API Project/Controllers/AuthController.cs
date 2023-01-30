@@ -1,8 +1,6 @@
 ﻿using API_Models.Context;
 using API_Models.Models;
-using API_Models.Models.AuthRequests;
-using API_Models.Models.requests;
-using API_Models.Models.VModels;
+using API_Models.Models.VModels.Authorization;
 using API_Project.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -65,7 +63,9 @@ namespace API_Project.Controllers
                         Result = true,
                         Token = token,
                     });
+                   
                 }
+                    await userManager.AddToRoleAsync(user, "user");
                     return BadRequest(new AuthResponse()
             {
                      Errors = new List<string>()
@@ -106,17 +106,19 @@ namespace API_Project.Controllers
                         { 
                             "Username or Password are incorrect!"
                         }
-                    });   
+                        
+                    });
+                    
                 }
             }
             return BadRequest();
         }
-
+        
         private string GenerateJwtToken(IdentityUser user)
         {
+           // var role = userManager.GetRoleAsync(user);
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration.GetSection("Jwt:Secret").Value);
-
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new[]
@@ -124,9 +126,11 @@ namespace API_Project.Controllers
                     new Claim("Id", user.Id),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    //  new Claim(JwtRegisteredClaimNames.Aud, configuration.GetSection("Jwt:ValidAudience").Value),
+                    new Claim(JwtRegisteredClaimNames.Iss, configuration["Jwt:ValidIssuer"]),
                 }),
-                Expires = DateTime.Now.AddMinutes(4),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512)
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);

@@ -1,5 +1,5 @@
 ﻿using API_Models.Models;
-using API_Models.Models.AuthRequests;
+using API_Models.Models.VModels.Authorization;
 using AutoMapper;
 using System;
 using System.Collections.Generic;

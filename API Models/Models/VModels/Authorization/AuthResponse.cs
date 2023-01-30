@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models.requests
+namespace API_Models.Models.VModels.Authorization
 {
     public class AuthResponse
     {

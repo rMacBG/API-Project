@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using API_Models.Models;
+using API_Project.Configs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,16 @@ namespace API_Models.Context
         }
         public DbSet<Book>? Books { get; set; }
         public DbSet<Author>? Authors { get; set; }
+        public DbSet<BookAuthor> BookAuthors { get; set; }
 
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.Entity<BookAuthor>().HasKey(o => new { o.BookId, o.AuthorId });
+        }
 
     }
 }

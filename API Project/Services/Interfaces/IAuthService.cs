@@ -1,6 +1,5 @@
 ﻿using API_Models.Models;
-using API_Models.Models.AuthRequests;
-using API_Models.Models.requests;
+using API_Models.Models.VModels.Authorization;
 
 namespace API_Project.Services.Interfaces
 {

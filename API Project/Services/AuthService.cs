@@ -1,6 +1,6 @@
 ﻿using API_Models.Context;
 using API_Models.Models;
-using API_Models.Models.AuthRequests;
+using API_Models.Models.VModels.Authorization;
 using API_Project.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;

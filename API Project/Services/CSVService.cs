@@ -1,4 +1,5 @@
-﻿using API_Models.Context;
+﻿using API_Models;
+using API_Models.Context;
 using API_Models.Mappers;
 using API_Models.Models.VModels;
 using API_Project.Services.Interfaces;
@@ -16,7 +17,7 @@ namespace API_Project.Services
         {
             this.appContext = appContext;
         }
-        
+
 
         public async Task seed(string seed)
         {
@@ -28,11 +29,25 @@ namespace API_Project.Services
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             csv.Context.RegisterClassMap<BookCsvMapper>();
-            for(int i = 0; i < 1000; i++) 
-            { 
+            for (int i = 0; i < 1000; i++)
+            {
                 csv.Read();
+                var model = csv.GetRecord<FileTransferModel>();
+                appContext.Add(new Book
+                {
+                    Name = model.Name,
+                    BookAuthor = model.BookAuthor,
+                    Description = model.Description,
+                    ReleaseYear = model.ReleaseYear,
+                    RatingCount = model.RatingCount,
+                    AverageRating = model.AverageRating,
+                    BookPages = model.BookPages,
+                    Category = model.Category,
 
+                });
             }
+            await appContext.SaveChangesAsync();
         }
+        
     }
 }

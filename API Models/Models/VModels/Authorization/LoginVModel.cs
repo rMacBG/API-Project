@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models.VModels
+namespace API_Models.Models.VModels.Authorization
 {
     public class LoginVModel
     {
