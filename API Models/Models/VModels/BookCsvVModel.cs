@@ -12,7 +12,7 @@ namespace API_Models.Models.VModels
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<BookAuthor> BookAuthor { get; set; }
+        public Author BookAuthor { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public string ReleaseYear { get; set; }

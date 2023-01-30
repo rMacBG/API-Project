@@ -33,8 +33,8 @@ namespace API_Project.Services
                 .FirstOrDefaultAsync(x => x.Id == author.Id);
             if (result != null) 
             {
-                result.FirstName = author.FirstName;
-                result.LastName = author.LastName;
+                result.FullName = author.FullName;
+                result.FullName = author.FullName;
 
                 await appContext.SaveChangesAsync();
                 return result;

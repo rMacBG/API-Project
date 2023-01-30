@@ -1,6 +1,7 @@
 ﻿using API_Models;
 using API_Models.Context;
 using API_Models.Mappers;
+using API_Models.Models;
 using API_Models.Models.VModels;
 using API_Project.Services.Interfaces;
 using CsvHelper;
@@ -19,7 +20,7 @@ namespace API_Project.Services
         }
 
 
-        public async Task seed(string seed)
+        public async Task seedBooks(string seed)
         {
             if (await appContext.Books.AnyAsync())
             {
@@ -36,7 +37,7 @@ namespace API_Project.Services
                 appContext.Add(new Book
                 {
                     Name = model.Name,
-                    BookAuthor = model.BookAuthor,
+                    BookAuthor = (ICollection<BookAuthor>)model.Author,
                     Description = model.Description,
                     ReleaseYear = model.ReleaseYear,
                     RatingCount = model.RatingCount,
@@ -45,9 +46,28 @@ namespace API_Project.Services
                     Category = model.Category,
 
                 });
+                
+            }
+            if (await appContext.Authors.AnyAsync())
+            {
+                return;
+            }
+
+            csv.Context.RegisterClassMap<AuthorCsvMapper>();
+            for (int j = 0; j < 1000; j++)
+            {
+                csv.Read();
+                var model2 = csv.GetRecord<Author>();
+                appContext.Add(new Author
+                {
+                    FullName = model2.FullName
+                });
             }
             await appContext.SaveChangesAsync();
         }
-        
+        public async Task seedAuthors(string seed)
+        {
+           
+        }
     }
 }

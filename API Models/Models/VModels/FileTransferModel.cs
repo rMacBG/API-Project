@@ -11,7 +11,7 @@ namespace API_Models.Models.VModels
     {
         public string Name { get; set; }
 
-        public List<BookAuthor> BookAuthor { get; set; }
+        public Author Author { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public string ReleaseYear { get; set; }

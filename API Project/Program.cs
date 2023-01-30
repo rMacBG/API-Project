@@ -112,7 +112,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var bookSeed = scope.ServiceProvider.GetRequiredService<ICSVService>();
-    await bookSeed.seed("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
+
+    await bookSeed.seedBooks("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
+    
 }
 if (app.Environment.IsDevelopment())
 {

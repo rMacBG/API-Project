@@ -39,7 +39,7 @@ namespace API_Project.Controllers
             await bookService.GetBookByName(name);
             return Ok(name);
         }
-        
+       
         [HttpPost]
         [Route("Create a Book")]
         public async Task<IActionResult> AddBook([FromForm] BookCreateVModel model)
@@ -76,13 +76,13 @@ namespace API_Project.Controllers
    
         [HttpDelete]
         [Route("Delete a Book")]
-        public async Task<IActionResult> RemoveBook([FromBody] string name)
+        public async Task<IActionResult> RemoveBook([FromBody] Guid id)
         {
-            if (name == null)
+            if (id == null)
             {
                 return NotFound();
             }
-           await bookService.RemoveBook(name);
+           await bookService.RemoveBook(id);
             return Ok();
         }
     }
