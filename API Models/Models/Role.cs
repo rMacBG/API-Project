@@ -1,8 +1,9 @@
-﻿namespace API_Models.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace API_Models.Models
 {
-    public enum Role
+    public class Role : IdentityRole<Guid>
     {
-        Admin,
-        User
+       
     }
 }

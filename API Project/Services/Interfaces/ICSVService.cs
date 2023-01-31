@@ -6,7 +6,6 @@ namespace API_Project.Services.Interfaces
     public interface ICSVService
     {
          public Task seedBooks(string seed);
-         public Task seedAuthors(string seed);
 
     }
 }

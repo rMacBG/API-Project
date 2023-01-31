@@ -30,56 +30,53 @@ namespace API_Project.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        [Route ("Register")]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterVModel model)
         {
-            if (ModelState.IsValid)
+            var checkUser = await userManager.FindByEmailAsync(model.Email);
+            if (checkUser != null)
             {
-                var checkUser = await userManager.FindByEmailAsync(model.Email);
-                if (checkUser != null)
+                return BadRequest(new AuthResponse()
                 {
-                    return BadRequest(new AuthResponse()
-        {
-                        Result = true,
-                        Errors = new List<string>()
+                    Result = true,
+                    Errors = new List<string>()
                         {
                             "Email already exists!"
                         }
-                    });
-                }
-                var user = new User()
-                {
-                    Email = model.Email,
-                    UserName = model.Username,
-
-                };
-                var create = await userManager.CreateAsync(user, model.Password);
-                
-                if (create.Succeeded)
-                {
-                    var token = GenerateJwtToken(user);
-                    return Ok(new AuthResponse()
-                    {
-                        Result = true,
-                        Token = token,
-                    });
-                   
-                }
-                    await userManager.AddToRoleAsync(user, "user");
-                    return BadRequest(new AuthResponse()
+                });
+            }
+            var user = new User()
             {
-                     Errors = new List<string>()
+                Email = model.Email,
+                UserName = model.Username,
+
+            };
+            var create = await userManager.CreateAsync(user, model.Password);
+
+            if (!create.Succeeded)
+            {  
+                return BadRequest(new AuthResponse()
+                {
+                    Errors = new List<string>()
                     {
                         "Server Error"
                     },
-                        Result = false
-                    });
 
+                    Result = false,
+                });
             }
+            await userManager.AddToRoleAsync(user, "user");
+            var token = GenerateJwtToken(user);
+            return Ok(new AuthResponse()
+            {
 
-                    return BadRequest();
-
+                Result = true,
+                Token = token
+            });
         }
+    
+
+        
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
@@ -114,22 +111,25 @@ namespace API_Project.Controllers
             return BadRequest();
         }
         
-        private string GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(User user)
         {
-           // var role = userManager.GetRoleAsync(user);
+            var role = userManager.GetRolesAsync(user);
+            IdentityOptions options = new IdentityOptions();
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration.GetSection("Jwt:Secret").Value);
+
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new[]
+                Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("Id", user.Id),
+                    new Claim("UserId", user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     //  new Claim(JwtRegisteredClaimNames.Aud, configuration.GetSection("Jwt:ValidAudience").Value),
                     new Claim(JwtRegisteredClaimNames.Iss, configuration["Jwt:ValidIssuer"]),
+                   // new Claim(options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault()!)
                 }),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);

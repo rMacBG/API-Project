@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models.VModels
+namespace API_Models.Models.VModels.CsvModels
 {
     public class BookCsvVModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
-
-        public Author BookAuthor { get; set; }
+        public string Author { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public string ReleaseYear { get; set; }

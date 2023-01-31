@@ -1,4 +1,4 @@
-﻿using API_Models.Models.VModels;
+﻿using API_Models.Models.VModels.CsvModels;
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;

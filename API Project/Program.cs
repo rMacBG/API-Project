@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using API_Project.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,9 +54,17 @@ builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<UserManager<User>>();
-builder.Services.AddTransient<ICSVService, CSVService>();
+//builder.Services.AddTransient<ICSVService, CSVService>();
 builder.Services
-    .AddIdentity<User, IdentityRole>()
+    .AddIdentity<User, Role>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 1;
+        options.Password.RequiredUniqueChars = 1;
+    })
     .AddEntityFrameworkStores<LibContext>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]);
@@ -89,16 +98,7 @@ builder.Services.AddAuthentication( o =>
 //    .AddDefaultTokenProviders();
 
    // .AddDefaultTokenProviders();
-builder.Services
-    .Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 1;
-    options.Password.RequiredUniqueChars = 1;
-});//(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
+//(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
 builder.Services.AddAuthorization();
 //builder.Services.AddCors(o =>
 //{
@@ -109,19 +109,21 @@ builder.Services.AddAuthorization();
 //});
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var bookSeed = scope.ServiceProvider.GetRequiredService<ICSVService>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var bookSeed = scope.ServiceProvider.GetRequiredService<ICSVService>();
 
-    await bookSeed.seedBooks("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
+//    await bookSeed.seedBooks("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
     
-}
+//}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 // app.UseCors();
+await app.SeedRolesAsync();
+await app.SeedUsersAsync();
 app.UseHttpsRedirection();
 
 

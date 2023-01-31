@@ -1,5 +1,6 @@
 ﻿using API_Models;
 using API_Models.Context;
+using API_Models.Models;
 using API_Models.Models.VModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +48,7 @@ namespace API_Project.Controllers
             var book = new Book
             {
                 Name = model.Name,
-                BookAuthor = model.BookAuthor,
+                Author = model.Author,
                 Description = model.Description,
                 Category = model.Category,
                 ReleaseYear = model.ReleaseYear,

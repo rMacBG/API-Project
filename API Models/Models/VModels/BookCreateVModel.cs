@@ -11,7 +11,7 @@ namespace API_Models.Models.VModels
     {
         public string Name { get; set; }
 
-       public ICollection<BookAuthor> BookAuthor { get; set; }
+       public string Author { get; set; }
         public string Category { get; set; }
         [StringLength(15000)]
         public string Description { get; set; }

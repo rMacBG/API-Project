@@ -8,7 +8,7 @@ namespace API_Models
        
         public string Name { get; set; }
        
-        public ICollection<BookAuthor> BookAuthor { get; set; }
+        public string Author { get; set; }
         public string Category { get; set; }
         [StringLength(500000)]
         public string Description { get; set; }
@@ -19,10 +19,6 @@ namespace API_Models
         [Range(1, 2500)]
         public int BookPages { get; set; }
         public int RatingCount { get; set; }
-
-
-
-
     }
 
 }

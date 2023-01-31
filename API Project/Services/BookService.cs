@@ -45,7 +45,7 @@ namespace API_Project.Controllers
             if (result != null)
             {
                 result.Name = book.Name;
-                result.BookAuthor = book.BookAuthor;
+                result.Author = book.Author;
                 result.BookPages = book.BookPages;
                 result.ReleaseYear = book.ReleaseYear;
 

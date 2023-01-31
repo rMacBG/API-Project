@@ -2,7 +2,7 @@
 
 namespace API_Models.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<Guid>
     {
 
     }

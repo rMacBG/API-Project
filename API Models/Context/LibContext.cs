@@ -10,15 +10,15 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace API_Models.Context
 {
-    public class LibContext : IdentityDbContext<User>
+    public class LibContext : IdentityDbContext<User, Role, Guid>
     {
-        public LibContext(DbContextOptions options) : base(options)
+        public LibContext(DbContextOptions<LibContext> options) : base(options)
         {
 
         }
         public DbSet<Book>? Books { get; set; }
         public DbSet<Author>? Authors { get; set; }
-        public DbSet<BookAuthor> BookAuthors { get; set; }
+       public DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -26,8 +26,9 @@ namespace API_Models.Context
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new UserConfiguration());
-            builder.Entity<BookAuthor>().HasKey(o => new { o.BookId, o.AuthorId });
+            
         }
+
 
     }
 }
