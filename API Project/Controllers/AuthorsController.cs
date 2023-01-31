@@ -1,4 +1,6 @@
-﻿using API_Models.Models;
+﻿using API_Models;
+using API_Models.Models;
+using API_Models.Models.VModels.CsvModels;
 using API_Project.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +23,24 @@ namespace API_Project.Controllers
            
         }
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromRoute] Author author)
+        public async Task<IActionResult> Create([FromRoute] AuthorVModel model)
         {
-            if (author == null)
+            if (model == null)
             {
                 return NotFound();
             }
-            await authorService.Create(author);
-            return Ok(author);
+            var author = new Author
+            {
+                FullName = model.FullName,
+            };
+             var result = await authorService.Create(author);
+            return CreatedAtAction(
+                nameof(this.Create),
+                new
+                {
+                    result = result.ToString()
+                });
+
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromRoute] Author author)

@@ -19,7 +19,7 @@ namespace API_Project.Controllers
         {
             this.bookService = bookService;
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         [Route("Get All Books")]
         
@@ -27,9 +27,10 @@ namespace API_Project.Controllers
         {
            return await bookService.GetBooks();
         }
-        [HttpGet("Get Books by Id")]
+        
+        [HttpGet("Get Books by name")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetBookByName([FromBody] string name)
+        public async Task<IActionResult> GetBookByName([FromForm] string name)
         {
             if (name == null)
             {
@@ -40,11 +41,12 @@ namespace API_Project.Controllers
             await bookService.GetBookByName(name);
             return Ok(name);
         }
-       
+        [Authorize(Roles = "Admin, User")]
         [HttpPost]
         [Route("Create a Book")]
         public async Task<IActionResult> AddBook([FromForm] BookCreateVModel model)
         {
+           
             var book = new Book
             {
                 Name = model.Name,
@@ -62,10 +64,10 @@ namespace API_Project.Controllers
                     result = result.ToString()
                 });
         }
-        
+        [Authorize(Roles = "Admin, User")]
         [HttpPut]
         [Route("Update a Book")]
-        public async Task<IActionResult>UpdateBook([FromBody] Book book)
+        public async Task<IActionResult>UpdateBook([FromForm] Book book)
         {
             if (book == null)
             {
@@ -74,10 +76,10 @@ namespace API_Project.Controllers
             await bookService.UpdateBook(book);
             return Ok();
         }
-   
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("Delete a Book")]
-        public async Task<IActionResult> RemoveBook([FromBody] Guid id)
+        public async Task<IActionResult> RemoveBook([FromForm] Guid id)
         {
             if (id == null)
             {

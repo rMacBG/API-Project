@@ -33,6 +33,7 @@ namespace API_Project.Controllers
 
         public async Task<Book> AddBook(Book book)
         {
+
             book.Id = Guid.NewGuid();
             var result = await appContext.Books.AddAsync(book);
             await appContext.SaveChangesAsync();

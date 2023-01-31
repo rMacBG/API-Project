@@ -7,16 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Identity.UI;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Microsoft.Extensions.DependencyInjection;
 using API_Models.Models;
 using API_Models.Models.AppSettings;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.Net.Http.Headers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 using API_Project.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +47,7 @@ builder.Services
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<UserManager<User>>();
 //builder.Services.AddTransient<ICSVService, CSVService>();
@@ -62,7 +58,7 @@ builder.Services
         options.Password.RequireLowercase = false;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
-        options.Password.RequiredLength = 1;
+        options.Password.RequiredLength = 3;
         options.Password.RequiredUniqueChars = 1;
     })
     .AddEntityFrameworkStores<LibContext>();
@@ -86,42 +82,29 @@ builder.Services.AddAuthentication( o =>
             ClockSkew = TimeSpan.Zero,
             ValidAudience = builder.Configuration["Jwt:ValidAudience"],
              ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
-           // RequireExpirationTime = true,
-           // ValidateLifetime = true,
+          
             IssuerSigningKey = new SymmetricSecurityKey(key)
             
         };
     });
-//builder.Services
-//    .AddDefaultIdentity<User>()
-//    .AddEntityFrameworkStores<LibContext>()
-//    .AddDefaultTokenProviders();
 
-   // .AddDefaultTokenProviders();
-//(o => o.SignIn.RequireConfirmedEmail = true).AddEntityFrameworkStores<LibContext>();
 builder.Services.AddAuthorization();
-//builder.Services.AddCors(o =>
-//{
-//    o.AddPolicy("AllowAll", builder =>
-//    builder.AllowAnyOrigin()
-//    .AllowAnyMethod()
-//    .AllowAnyHeader());
-//});
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("AllowAll", builder =>
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+});
 
 var app = builder.Build();
-//using (var scope = app.Services.CreateScope())
-//{
-//    var bookSeed = scope.ServiceProvider.GetRequiredService<ICSVService>();
 
-//    await bookSeed.seedBooks("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\Books.csv");
-    
-//}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-// app.UseCors();
+ app.UseCors();
 await app.SeedRolesAsync();
 await app.SeedUsersAsync();
 app.UseHttpsRedirection();

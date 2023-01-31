@@ -15,7 +15,7 @@ namespace API_Models.Models.VModels.Authorization
         public string? Username { get; set; }
         [Required(ErrorMessage = "E-mail Required!")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "Password Required")]
+        [Required(ErrorMessage = "Password Required, password also has to be at least 3 characters long!")]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 

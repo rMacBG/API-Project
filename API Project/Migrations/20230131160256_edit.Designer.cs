@@ -4,6 +4,7 @@ using API_Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Project.Migrations
 {
     [DbContext(typeof(LibContext))]
-    partial class LibContextModelSnapshot : ModelSnapshot
+    [Migration("20230131160256_edit")]
+    partial class edit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,15 +216,15 @@ namespace API_Project.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "076d7691-69cf-4701-9ba1-90b9f415da17",
-                            ConcurrencyStamp = "f99836b5-159f-4cb7-b593-1ff517fe35b6",
+                            Id = "0c41c295-e87f-492a-a338-08fdab9f2982",
+                            ConcurrencyStamp = "9ed50e52-bc36-4195-85bf-8a0d2e3dbcc0",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "20df3bf3-e5d6-45b5-b519-83b651156c35",
-                            ConcurrencyStamp = "d92cd4b0-5247-4106-91e4-3f88d9cb73e9",
+                            Id = "0013cbff-d2ff-40f8-92e2-219a6a776de2",
+                            ConcurrencyStamp = "351e4127-7d4e-48ab-85fa-6b126cd85a47",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });

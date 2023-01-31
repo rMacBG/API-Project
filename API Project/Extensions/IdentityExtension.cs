@@ -44,6 +44,7 @@ namespace API_Project.Extensions
             {
                 UserName = email,
                 Email = email,
+                PasswordHash = email,
             };
     }
 }
