@@ -1,7 +1,8 @@
 ﻿using API_Models;
 using API_Models.Models;
-using API_Models.Models.VModels.CsvModels;
+using API_Models.Models.VModels;
 using API_Project.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +23,9 @@ namespace API_Project.Controllers
            return await authorService.GetAllAuthors();
            
         }
+        [Authorize(Roles = "Admin, User")]
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromRoute] AuthorVModel model)
+        public async Task<IActionResult> Create([FromForm] AutorVModel model)
         {
             if (model == null)
             {
@@ -42,8 +44,9 @@ namespace API_Project.Controllers
                 });
 
         }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] Author author)
+        [Authorize(Roles = "Admin, User")]
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromForm] Author author)
         {
             if (author == null)
             {
@@ -52,8 +55,9 @@ namespace API_Project.Controllers
             await authorService.Update(author);
             return Ok(author);
         }
-        [HttpDelete]
-        public async Task<IActionResult> Delete ([FromRoute] Guid id)
+        [Authorize(Roles = "Admin, User")]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete ([FromForm] Guid id)
         {
             if (id != null)
             {

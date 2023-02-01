@@ -4,6 +4,7 @@ using API_Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_Project.Migrations
 {
     [DbContext(typeof(LibContext))]
-    partial class LibContextModelSnapshot : ModelSnapshot
+    [Migration("20230131222701_editidk")]
+    partial class editidk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,9 @@ namespace API_Project.Migrations
 
             modelBuilder.Entity("API_Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -67,18 +67,16 @@ namespace API_Project.Migrations
 
             modelBuilder.Entity("API_Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryNames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MyPropertyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MyPropertyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -89,18 +87,16 @@ namespace API_Project.Migrations
 
             modelBuilder.Entity("API_Models.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("bookId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("bookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -224,15 +220,15 @@ namespace API_Project.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "599469d6-4613-43e1-b2e3-0ca36d160875",
-                            ConcurrencyStamp = "7db3d595-76e6-477f-8596-9a4d8bbd6a95",
+                            Id = "27bcb2be-4657-498b-a6f2-768e57a6d882",
+                            ConcurrencyStamp = "9243bdce-6d19-4539-b5c4-cf819135f704",
                             Name = "user",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "fb76666b-19d3-4f59-b1f1-a06895172d4a",
-                            ConcurrencyStamp = "ce180f64-d3fe-4698-b2da-24822da412ef",
+                            Id = "83917d3a-788c-4b54-8f54-423cb4aff301",
+                            ConcurrencyStamp = "127ccafd-860f-4c9d-a172-932a4b5e4480",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });

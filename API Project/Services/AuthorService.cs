@@ -20,7 +20,7 @@ namespace API_Project.Services
 
         public async Task<Author> Create(Author author)
         {
-            author.Id = Guid.NewGuid();
+           // author.Id = Guid.NewGuid();
             var result = await appContext.Authors.AddAsync(author);
             await appContext.SaveChangesAsync();
             return result.Entity;

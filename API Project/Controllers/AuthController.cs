@@ -52,6 +52,10 @@ namespace API_Project.Controllers
             var jwtResult = await authService.Login(model);
             return Ok(jwtResult);
         }
+
+
+
+
         //private readonly UserManager<User> userManager;
         //private readonly IConfiguration configuration;
 

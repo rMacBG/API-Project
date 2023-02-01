@@ -41,7 +41,7 @@ namespace API_Project.Controllers
             await bookService.GetBookByName(name);
             return Ok(name);
         }
-        [Authorize(Roles = "Admin, User")]
+      //  [Authorize(Roles = "Admin, User")]
         [HttpPost]
         [Route("Create a Book")]
         public async Task<IActionResult> AddBook([FromForm] BookCreateVModel model)
@@ -64,7 +64,7 @@ namespace API_Project.Controllers
                     result = result.ToString()
                 });
         }
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         [HttpPut]
         [Route("Update a Book")]
         public async Task<IActionResult>UpdateBook([FromForm] Book book)
@@ -76,15 +76,12 @@ namespace API_Project.Controllers
             await bookService.UpdateBook(book);
             return Ok();
         }
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin, User")]
         [HttpDelete]
-        [Route("Delete a Book")]
-        public async Task<IActionResult> RemoveBook([FromForm] Guid id)
+        [Route("{id}")]
+        public async Task<IActionResult> RemoveBook([FromBody] Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+
            await bookService.RemoveBook(id);
             return Ok();
         }

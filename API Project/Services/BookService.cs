@@ -18,10 +18,7 @@ namespace API_Project.Controllers
 
         public async Task<IEnumerable<Book>> GetBooks()
         {
-            var res = appContext.Books.Select(x => new Book()
-            {
-                Name= x.Name
-            }).ToListAsync();
+            var res = appContext.Books.ToListAsync();
             return await res;
         }
 
@@ -56,16 +53,27 @@ namespace API_Project.Controllers
             return null;
         }
 
-        public async Task<Book> RemoveBook(Guid id)
+        public async Task RemoveBook(Guid id)
         {
-            var result = await appContext.Books
-                .FirstOrDefaultAsync(e => e.Id == id);
-            if (result != null)
+            //var result = await appContext.Books.
+            //    FindAsync(id);
+            //    appContext.Books.Remove(result);
+            //    await appContext.SaveChangesAsync();
+            //return result;
+
+            //appContext.Remove( new Book {Id = id });
+            //await appContext.SaveChangesAsync();
+            var result = await appContext.Books.FirstOrDefaultAsync(o => o.Id == id);
+            if (result != null )
             {
                 appContext.Books.Remove(result);
-                await appContext.SaveChangesAsync();
+                appContext.SaveChangesAsync();
             }
-            return null;
+                
+                
+            
+            
+
 
         }
 

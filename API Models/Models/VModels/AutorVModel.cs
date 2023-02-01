@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Models.Models.VModels.CsvModels
+namespace API_Models.Models.VModels
 {
-    public class AuthorVModel
+    public class AutorVModel
     {
-        public string?  FullName { get; set; }
+        public string FullName { get; set; }
     }
 }

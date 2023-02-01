@@ -50,7 +50,7 @@ builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<UserManager<User>>();
-//builder.Services.AddTransient<ICSVService, CSVService>();
+builder.Services.AddTransient<ICSVService, CSVService>();
 builder.Services
     .AddIdentity<User, Role>(options =>
     {
@@ -96,9 +96,12 @@ builder.Services.AddCors(o =>
     .AllowAnyMethod()
     .AllowAnyHeader());
 });
-
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{ 
+    var seeder = scope.ServiceProvider.GetRequiredService<ICSVService>();
+    await seeder.seed("C:\\Users\\vlady\\source\\repos\\src\\API Project\\API Project\\Csv\\books.csv");
+}
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
